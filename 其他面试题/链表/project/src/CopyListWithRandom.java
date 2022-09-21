@@ -17,34 +17,16 @@ public class CopyListWithRandom {
         cur = head;
         Node newHead = map.get(cur);
         while (cur != null) {
-            map.get(cur).next = map.get(cur.next) != null ? map.get(cur.next).next : null;
-            map.get(cur).rand = map.get(cur.rand) != null ? map.get(cur.rand).rand : null;
+            map.get(cur).next = map.get(cur.next) != null ? map.get(cur.next) : null;
+            map.get(cur).rand = map.get(cur.rand) != null ? map.get(cur.rand) : null;
             cur = cur.next;
         }
         return newHead;
     }
 
     //不用容器法O(1)
-
     private static Node copyListWithRand1(Node head) {
-        // key 老节点
-        // value 新节点
-        HashMap<Node, Node> map = new HashMap<Node, Node>();
-        Node cur = head;
-        while (cur != null) {
-            map.put(cur, new Node(cur.value));
-            cur = cur.next;
-        }
-        cur = head;
-        while (cur != null) {
-            // cur 老
-            // map.get(cur) 新
-            // 新.next ->  cur.next克隆节点找到
-            map.get(cur).next = map.get(cur.next);
-            map.get(cur).rand = map.get(cur.rand);
-            cur = cur.next;
-        }
-        return map.get(head);
+        return null;
     }
 //    private static Node copyListWithRand1(Node head) {
 //        Node newHead = new Node(head.value);
