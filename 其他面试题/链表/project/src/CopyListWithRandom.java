@@ -4,6 +4,7 @@ import java.util.HashMap;
  * @author yelanyanyu@zjxu.edu.cn
  * @version 1.0
  */
+@SuppressWarnings({"all"})
 public class CopyListWithRandom {
 
     //容器法O(N)
@@ -24,9 +25,76 @@ public class CopyListWithRandom {
         return newHead;
     }
 
+    public static Node copyListWithRand3(Node head) {
+        // key 老节点
+        // value 新节点
+        HashMap<Node, Node> map = new HashMap<Node, Node>();
+        Node cur = head;
+        while (cur != null) {
+            map.put(cur, new Node(cur.value));
+            cur = cur.next;
+        }
+        cur = head;
+        while (cur != null) {
+            // cur 老
+            // map.get(cur) 新
+            // 新.next ->  cur.next克隆节点找到
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).rand = map.get(cur.rand);
+            cur = cur.next;
+        }
+        return map.get(head);
+    }
+
     //不用容器法O(1)
     private static Node copyListWithRand1(Node head) {
-        return null;
+        if (head == null) {
+            return null;
+        }
+        Node cur = head;
+        Node nextNode = head.next;
+        /**
+         * 构建克隆链表
+         */
+        while (cur != null) {
+            Node node = new Node(cur.value);
+            cur.next = node;
+            node.next = nextNode;
+            cur = nextNode;
+            nextNode = nextNode != null ? nextNode.next : null;
+        }
+        /**
+         * 克隆rand
+         */
+        Node pre = head;
+        cur = head.next;
+        while (cur != null) {
+            cur.rand = pre.rand != null ? pre.rand.next : null;
+            pre = (pre.next != null && pre.next.next != null) ? pre.next.next : null;
+            cur = (cur.next != null && cur.next.next != null) ? cur.next.next : null;
+        }
+
+
+        cur = head.next;
+        Node newHead = head.next;
+        pre = head;
+        /**
+         * 这种办法的更新节点方式出了问题，当pre.next指向cur.next的时候pre的后继指针就是cur.next，
+         * 而不是原先的cur.next。
+         */
+//        while (cur != null) {
+//            pre.next = cur.next;
+//            pre = pre.next;
+//            cur = cur.next;
+//        }
+//        pre = null;
+        while (cur != null) {
+            pre.next = cur.next;
+            pre = cur;
+            cur = cur.next;
+        }
+        pre = null;
+        return newHead;
     }
 //    private static Node copyListWithRand1(Node head) {
 //        Node newHead = new Node(head.value);
@@ -47,16 +115,6 @@ public class CopyListWithRandom {
 //        }
 //        return newHead;
 //    }
-
-    public static class Node {
-        public int value;
-        public Node next;
-        public Node rand;
-
-        public Node(int data) {
-            this.value = data;
-        }
-    }
 
     public static void printRandLinkedList(Node head) {
         Node cur = head;
@@ -101,21 +159,50 @@ public class CopyListWithRandom {
         head.next.next.next.next.rand = null; // 5 -> null
         head.next.next.next.next.next.rand = head.next.next.next; // 6 -> 4
 
+        //正确方法
         System.out.println("原始链表：");
         printRandLinkedList(head);
         System.out.println("=========================");
-        res1 = copyListWithRand1(head);
-        System.out.println("方法一的拷贝链表：");
-        printRandLinkedList(res1);
+        Node res3 = copyListWithRand3(head);
+        System.out.println("方法3的拷贝链表：");
+        printRandLinkedList(res3);
         System.out.println("=========================");
+        System.out.println("经历方法3拷贝之后的原始链表：");
+        printRandLinkedList(head);
+        System.out.println("======================================================");
+
+
+        //方法2
         res2 = copyListWithRand2(head);
         System.out.println("方法二的拷贝链表：");
         printRandLinkedList(res2);
         System.out.println("=========================");
         System.out.println("经历方法二拷贝之后的原始链表：");
         printRandLinkedList(head);
-        System.out.println("=========================");
+        System.out.println("========================================================");
 
+
+        //方法1
+        System.out.println("=========================");
+        res1 = copyListWithRand1(head);
+        System.out.println("方法一的拷贝链表：");
+        printRandLinkedList(res1);
+        System.out.println("=========================");
+        System.out.println("经历方法1拷贝之后的原始链表：");
+        printRandLinkedList(head);
+        System.out.println("=======================================================");
+
+
+    }
+
+    public static class Node {
+        public int value;
+        public Node next;
+        public Node rand;
+
+        public Node(int data) {
+            this.value = data;
+        }
     }
 
     //用容器
