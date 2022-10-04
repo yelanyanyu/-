@@ -104,10 +104,12 @@ public class AsFarFromLandAsPossible_1911 {
                     for (int m = 0; m < pos.length; m++) {
                         curD = Math.abs(m - k) + Math.abs(pos[m] - l);
                         // TODO: 2022/10/1 补充找最大值逻辑
+                        max = (curD >= max) ? curD : max;
                     }
                 }
             }
         }
+        return max;
     }
 
     /**
