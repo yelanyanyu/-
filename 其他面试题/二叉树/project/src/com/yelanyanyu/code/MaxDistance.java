@@ -15,14 +15,23 @@ public class MaxDistance {
         if (head == null) {
             return 0;
         }
-        // TODO: 2022/10/3
-        return 0;
+        return process(head).maxDistance;
     }
 
     public static info process(Node x) {
-        // TODO: 2022/10/3
-        return null;
+        if (x == null) {
+            return new info(0, 0);
+        }
+        info leftInfo = process(x.left);
+        info rightInfo = process(x.right);
+        int newHeight = Math.max(leftInfo.heights, rightInfo.heights) + 1;
+        //经过x
+        int max1 = leftInfo.heights + rightInfo.heights + 1;
+        //不经过x
+        int max2 = Math.max(leftInfo.maxDistance, rightInfo.maxDistance);
+        return new info(Math.max(max1, max2), newHeight);
     }
+
 
     // for test
     public static Node generateRandomBST(int maxLevel, int maxValue) {
@@ -130,7 +139,13 @@ public class MaxDistance {
     }
 
     public static class info {
+        public int maxDistance;
+        public int heights;
 
+        public info(int maxDistance, int heights) {
+            this.maxDistance = maxDistance;
+            this.heights = heights;
+        }
     }
 
     public static class Node {
