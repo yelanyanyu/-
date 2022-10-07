@@ -11,5 +11,9 @@ public class GasStationf {
      * 设该卡车油箱无限大，且初始没有油。
      * 返回一个结果数组，里面记载着出发点是否可走完一圈的结果。
      */
+    public static boolean[] goodArray(int[] g, int[] c) {
+        // TODO: 2022/10/7
+        return null;
+    }
 
 }
