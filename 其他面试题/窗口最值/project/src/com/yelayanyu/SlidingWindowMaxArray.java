@@ -9,6 +9,7 @@ import java.util.LinkedList;
  * @author yelanyanyu@zjxu.edu.cn
  * @version 1.0
  */
+@SuppressWarnings({"all"})
 public class SlidingWindowMaxArray {
     /**
      * 假设一个固定大小为 W 的窗口，依次划过 arr，返回每一次滑出状况的最大值。
