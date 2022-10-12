@@ -4,7 +4,9 @@ package com.yelayanyu;
  * @author yelanyanyu@zjxu.edu.cn
  * @version 1.0
  */
+@SuppressWarnings({"all"})
 public class MinCoinsOnePaper {
+
 
     private static int dp3(int[] arr, int aim) {
         // TODO: 2022/10/7
@@ -17,13 +19,50 @@ public class MinCoinsOnePaper {
     }
 
     private static int dp1(int[] arr, int aim) {
-        // TODO: 2022/10/7
-        return 0;
+        int len = arr.length;
+        int[][] dp = new int[len + 1][aim + 1];
+        dp[len][0] = 0;
+        for (int i = 1; i <= aim; i++) {
+            dp[len][i] = Integer.MAX_VALUE;
+        }
+        for (int i = 0; i < len; i++) {
+            dp[i][0] = 0;
+        }
+        for (int index = len - 1; index >= 0; index--) {
+            for (int rest = 1; rest <= aim; rest++) {
+                int p1 = dp[index + 1][rest];
+                int p2 = dp[index + 1][rest - arr[index]];
+                if (p2 != Integer.MAX_VALUE) {
+                    p2++;
+                }
+                dp[index][rest] = Math.min(p1, p2);
+            }
+        }
+        return dp[0][aim];
     }
 
     public static int minCoins(int[] arr, int aim) {
-        // TODO: 2022/10/7
-        return 0;
+        if (aim <= 0) {
+            return 0;
+        }
+        return process(arr, 0, aim);
+    }
+
+    //
+    public static int process(int[] arr, int index, int rest) {
+        if (rest < 0) {
+            return Integer.MAX_VALUE;
+        }
+        int len = arr.length;
+        if (index == len) {
+            return rest == 0 ? 0 : Integer.MAX_VALUE;
+        }
+        int p1 = process(arr, index + 1, rest);
+        int p2 = process(arr, index + 1, rest - arr[index]);
+        if (p2 != Integer.MAX_VALUE) {
+            p2++;
+        }
+        return Math.min(p1, p2);
     }
 
     // 为了测试
@@ -68,6 +107,7 @@ public class MinCoinsOnePaper {
                 break;
             }
         }
+        System.out.println("功能测试结束");
     }
 
 
