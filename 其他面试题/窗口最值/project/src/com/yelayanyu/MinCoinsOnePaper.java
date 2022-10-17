@@ -1,6 +1,7 @@
 package com.yelayanyu;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -12,8 +13,59 @@ public class MinCoinsOnePaper {
 
 
     private static int dp3(int[] arr, int aim) {
-        // TODO: 2022/10/7
-        return 0;
+        if (aim < 0) {
+            return Integer.MAX_VALUE;
+        }
+        if ((arr == null || arr.length == 0) && aim == 0) {
+            return 0;
+        }
+        Info info = getInfo(arr);
+        int[] coins = info.coins;
+        int[] zhangs = info.zhangs;
+        int N = info.coins.length;
+        int[][] dp = new int[N + 1][aim + 1];
+        dp[N][0] = 0;
+        for (int i = 1; i <= aim; i++) {
+            dp[N][i] = Integer.MAX_VALUE;
+        }
+        for (int index = N - 1; index >= 0; index--) {
+            /**
+             * mod表示组数，
+             */
+            for (int mod = 0; mod < Math.min(aim + 1, info.coins[index]); mod++) {
+                int coin = coins[index];
+                int zhang = zhangs[index];
+                LinkedList<Integer> list = new LinkedList<>();
+                list.addLast(mod);
+                dp[index][mod] = dp[index + 1][mod];
+                for (int r = mod + info.coins[index]; r <= aim; r += info.coins[index]) {
+                    //更新最值
+                    while (!list.isEmpty()
+                            && (dp[index + 1][list.peekLast()] == Integer.MAX_VALUE
+                            || dp[index + 1][r]
+                            <= dp[index + 1][list.peekLast()] + compensate(r, list.peekLast(), coin))) {
+                        list.pollLast();
+                    }
+                    list.addLast(r);
+                    //筛除无效元素
+                    if (list.peekFirst() == (r - (zhang + 1) * coin)) {
+                        list.pollFirst();
+                    }
+                    dp[index][r] = dp[index + 1][list.peekFirst()] + compensate(r, list.peekFirst(), coin);
+                }
+            }
+        }
+        return dp[0][aim];
+    }
+
+    /**
+     * @param curIndex
+     * @param preIndex
+     * @param coin
+     * @return
+     */
+    private static int compensate(int curIndex, int preIndex, int coin) {
+        return (curIndex - preIndex) / coin;
     }
 
     private static int process2(Info info, int index, int rest) {
@@ -29,7 +81,7 @@ public class MinCoinsOnePaper {
         for (int zhangs = 0; zhangs <= curZhang; zhangs++) {
             int p1 = process2(info, index + 1, rest - zhangs * info.coins[index]);
             if (p1 != Integer.MAX_VALUE) {
-                p1++;
+                p1 += zhangs;
             }
             min = Math.min(p1, min);
         }
@@ -44,29 +96,33 @@ public class MinCoinsOnePaper {
      * @return
      */
     public static int dp2(int[] arr, int aim) {
-        if (aim == 0) {
+        if (aim < 0) {
+            return Integer.MAX_VALUE;
+        }
+        if ((arr == null || arr.length == 0) && aim == 0) {
             return 0;
         }
-        // 得到info时间复杂度O(arr长度)
         Info info = getInfo(arr);
-        int[] coins = info.coins;
-        int[] zhangs = info.zhangs;
-        int N = coins.length;
+        int N = info.coins.length;
         int[][] dp = new int[N + 1][aim + 1];
         dp[N][0] = 0;
-        for (int j = 1; j <= aim; j++) {
-            dp[N][j] = Integer.MAX_VALUE;
+        for (int i = 1; i <= aim; i++) {
+            dp[N][i] = Integer.MAX_VALUE;
         }
-        // 这三层for循环，时间复杂度为O(货币种数 * aim * 每种货币的平均张数)
         for (int index = N - 1; index >= 0; index--) {
             for (int rest = 0; rest <= aim; rest++) {
-                dp[index][rest] = dp[index + 1][rest];
-                for (int zhang = 1; zhang * coins[index] <= aim && zhang <= zhangs[index]; zhang++) {
-                    if (rest - zhang * coins[index] >= 0
-                            && dp[index + 1][rest - zhang * coins[index]] != Integer.MAX_VALUE) {
-                        dp[index][rest] = Math.min(dp[index][rest], zhang + dp[index + 1][rest - zhang * coins[index]]);
+                int min = Integer.MAX_VALUE;
+                for (int zhangs = 0; zhangs <= info.zhangs[index]; zhangs++) {
+                    int p1 = Integer.MAX_VALUE;
+                    if ((rest - zhangs * info.coins[index] >= 0)) {
+                        p1 = dp[index + 1][rest - zhangs * info.coins[index]];
                     }
+                    if (p1 != Integer.MAX_VALUE) {
+                        p1 += zhangs;
+                    }
+                    min = Math.min(p1, min);
                 }
+                dp[index][rest] = min;
             }
         }
         return dp[0][aim];
@@ -167,6 +223,7 @@ public class MinCoinsOnePaper {
 
     // 为了测试
     private static void printArray(int[] arr) {
+        System.out.print("arr= ");
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + " ");
         }
@@ -175,9 +232,9 @@ public class MinCoinsOnePaper {
 
     // 为了测试
     public static void main(String[] args) {
-        int maxLen = 20;
-        int maxValue = 30;
-        int testTime = 300000;
+        int maxLen = 10;
+        int maxValue = 10;
+        int testTime = 1000;
         System.out.println("功能测试开始");
         for (int i = 0; i < testTime; i++) {
             int N = (int) (Math.random() * maxLen);
@@ -186,15 +243,15 @@ public class MinCoinsOnePaper {
             int ans1 = minCoins2(arr, aim);
             int ans2 = dp1(arr, aim);
             int ans3 = dp2(arr, aim);
-//            int ans4 = dp3(arr, aim);
-            if (ans1 != ans2 || ans1 != ans3) {
+            int ans4 = dp3(arr, aim);
+            if (ans1 != ans2 || ans1 != ans3 || ans4 != ans1) {
                 System.out.println("Oops!");
                 printArray(arr);
-                System.out.println(aim);
-                System.out.println(ans1);
-                System.out.println(ans2);
-                System.out.println(ans3);
-//                System.out.println(ans4);
+                System.out.println("aim= " + aim);
+                System.out.println("minCoins2= " + ans1);
+                System.out.println("dp1= " + ans2);
+                System.out.println("dp2= " + ans3);
+                System.out.println("dp3= " + ans4);
                 break;
             }
         }
