@@ -1,6 +1,7 @@
 package com.yelanyanyu;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * @author yelanyanyu@zjxu.edu.cn
@@ -52,7 +53,31 @@ public class AllTimesMinToMax {
     }
 
     private static int max2(int[] arr) {
-        // TODO: 2022/10/20
-        return 0;
+        //求前缀和
+        int[] preSum = new int[arr.length];
+        preSum[0] = arr[0];
+        for (int i = 1; i < preSum.length; i++) {
+            preSum[i] = arr[i] + preSum[i - 1];
+        }
+
+        //单调栈
+        Stack<Integer> stack = new Stack<>();
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+
+            while (!stack.isEmpty() && arr[i] <= arr[stack.peek()]) {
+                Integer pop = stack.pop();
+                int res = stack.isEmpty() ? preSum[i - 1] : (preSum[i - 1] - preSum[stack.peek()]);
+                max = Math.max(max, res * arr[pop]);
+            }
+            stack.push(i);
+        }
+        //弹出剩余元素
+        while (!stack.isEmpty()) {
+            Integer pop = stack.pop();
+            int res = stack.isEmpty() ? preSum[arr.length - 1] : (preSum[arr.length - 1] - preSum[stack.peek()]);
+            max = Math.max(max, res * arr[pop]);
+        }
+        return max;
     }
 }
