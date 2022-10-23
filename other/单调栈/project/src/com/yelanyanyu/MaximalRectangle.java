@@ -5,5 +5,8 @@ package com.yelanyanyu;
  * @version 1.0
  */
 public class MaximalRectangle {
-//    https://leetcode.com/problems/maximal-rectangle/
+    //    https://leetcode.cn/problems/maximal-rectangle/
+    public int maximalRectangle(char[][] matrix) {
+
+    }
 }

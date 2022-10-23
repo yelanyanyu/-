@@ -5,5 +5,8 @@ package com.yelanyanyu;
  * @version 1.0
  */
 public class CountSubmatricesWithAllOnes {
-//    https://leetcode.com/problems/count-submatrices-with-all-ones
+    //    https://leetcode.cn/problems/count-submatrices-with-all-ones
+    public int numSubmat(int[][] mat) {
+
+    }
 }

@@ -5,6 +5,8 @@ package com.yelanyanyu;
  * @version 1.0
  */
 public class LargestRectangleInHistogram {
-//    https://leetcode.com/problems/largest-rectangle-in-histogram
+    //    https://leetcode.com/problems/largest-rectangle-in-histogram
+    public int largestRectangleArea(int[] heights) {
 
+    }
 }
