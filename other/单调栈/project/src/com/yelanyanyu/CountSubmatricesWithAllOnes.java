@@ -7,6 +7,7 @@ package com.yelanyanyu;
 public class CountSubmatricesWithAllOnes {
     //    https://leetcode.cn/problems/count-submatrices-with-all-ones
     public int numSubmat(int[][] mat) {
-
+        // TODO: 2022/10/27
+        return 0;
     }
 }

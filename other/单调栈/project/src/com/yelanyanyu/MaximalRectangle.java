@@ -7,6 +7,6 @@ package com.yelanyanyu;
 public class MaximalRectangle {
     //    https://leetcode.cn/problems/maximal-rectangle/
     public int maximalRectangle(char[][] matrix) {
-
+        return 0;
     }
 }
