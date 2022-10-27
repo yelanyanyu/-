@@ -9,10 +9,26 @@ import java.util.Stack;
  * @author yelanyanyu@zjxu.edu.cn
  * @version 1.0
  */
+@SuppressWarnings({"all"})
 public class MaximalRectangle {
     //    https://leetcode.cn/problems/maximal-rectangle/
     public int maximalRectangle(char[][] matrix) {
-        int[] heights = dealMatrix(matrix);
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+            return 0;
+        }
+        int[] heights = new int[matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                heights[j] = matrix[i][j] == '0' ? 0 : heights[j] + 1;
+            }
+            max = Math.max(max, maxRectangleByRows(heights));
+        }
+        return max;
+    }
+
+
+    private int maxRectangleByRows(int[] heights) {
         Stack<Integer> stack = new Stack<>();
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < heights.length; i++) {
@@ -37,28 +53,6 @@ public class MaximalRectangle {
         return (y - x + 1) * height;
     }
 
-    private int[] dealMatrix(char[][] matrix) {
-        int[] res = new int[matrix[0].length];
-        /*
-        初始化第一行
-         */
-        for (int i = 0; i < res.length; i++) {
-            res[i] = matrix[0][i] == '0' ? 0 : 1;
-        }
-        /*
-        得到heights数组
-         */
-        for (int i = 1; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == '0') {
-                    res[j] = 0;
-                    continue;
-                }
-                res[j] += 1;
-            }
-        }
-        return res;
-    }
 
     @Test
     public void Test01() {
