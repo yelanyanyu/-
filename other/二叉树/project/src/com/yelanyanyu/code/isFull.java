@@ -14,6 +14,7 @@ public class isFull {
         return process(head).isFull;
     }
 
+
     /**
      * 判断x是否为满二叉树，返回信息info
      *
