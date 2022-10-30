@@ -6,39 +6,30 @@ package com.yelanyanyu;
  */
 public class KMP {
     private static int getIndexOf(String s1, String s2) {
-        // TODO: 2022/10/30
-        //无效条件
-        if (s1 == null || s2 == null || s2.length() < 1 || s1.length() < s2.length()) {
+        if (s1 == null || s2 == null || s2.length() == 0 || s1.length() == 0) {
             return -1;
         }
         char[] str1 = s1.toCharArray();
         char[] str2 = s2.toCharArray();
-        int x = 0;//s1 中第一个不匹配的位置
-        int y = 0;//s2 中相应第一个不匹配的位置
-        // O(M) m <= n
-        int[] next = getNextArray(str2);//next数组
-        // O(N)
-        //若y越界了，就匹配到了（只有一直相等y才会跳出s2）
-        //x越界了，说明尝试了所有的开头都没有找到匹配
+        int[] next = getNextArray(str2);
+        int x = 0;
+        int y = 0;
         while (x < str1.length && y < str2.length) {
-            //相等就往后移，直到找到不匹配的
             if (str1[x] == str2[y]) {
                 x++;
                 y++;
-            } else if (next[y] == -1) { // y == 0，只有0位置的next值为-1
-                //已经不能往左跳了
-                x++;//相当于s2再次右移，将y与x对齐，此时y==0
-            } else {//还能往左跳，就将s2“右移”，s1不动
+            } else if (next[y] == -1) {
+                x++;
+            } else {
                 y = next[y];
             }
         }
-        //x-y就代表开头的位置，因为y越界了就相当于y=s2的长度
         return y == str2.length ? x - y : -1;
     }
 
     public static int[] getNextArray(char[] str2) {
         if (str2.length == 1) {
-            return new int[] { -1 };
+            return new int[]{-1};
         }
         int[] next = new int[str2.length];
         next[0] = -1;
