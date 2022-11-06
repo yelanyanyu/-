@@ -107,7 +107,8 @@ public class Manacher {
 
     @Test
     public void Test02() {
-        String str = "cecbcadbd";
-        max(str);
+        String str = "abccccdd";
+        System.out.println(max(str));
+        System.out.println(right(str));
     }
 }

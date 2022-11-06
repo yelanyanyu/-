@@ -42,10 +42,12 @@ public class TreeEqual {
 
     private static boolean containsTree2(Node big, Node small) {
         // TODO: 2022/11/4
+        return false;
     }
 
     private static boolean containsTree1(Node big, Node small) {
         // TODO: 2022/11/4
+        return false;
     }
 
     /*
