@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
  * @author yelanyanyu@zjxu.edu.cn
  * @version 1.0
  */
-public class GoalParserInterpretation1678 {
+public class _1678GoalParserInterpretation {
     public String interpret(String command) {
         return command.replace("()","o").replace("(al)","al");
     }
