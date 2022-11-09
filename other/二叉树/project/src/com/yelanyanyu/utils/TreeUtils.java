@@ -12,7 +12,7 @@ public class TreeUtils {
     }
 
     // for test
-    public static Node generate(int level, int maxLevel, int maxValue) {
+    private static Node generate(int level, int maxLevel, int maxValue) {
         if (level > maxLevel || Math.random() < 0.5) {
             return null;
         }

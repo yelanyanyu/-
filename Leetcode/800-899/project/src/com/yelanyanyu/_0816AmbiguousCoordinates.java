@@ -1,5 +1,6 @@
 package com.yelanyanyu;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,8 +13,9 @@ import java.util.List;
 public class _0816AmbiguousCoordinates {
 
 
-    private static void addStringList(ArrayList<String> list, String str1, String str2) {
-
+    private static void addStringList(ArrayList<String> list, String str, int i, int lineLeft, int lineRight) {
+        list.add("(" + str.substring(0, lineLeft) + "." + str.substring(lineLeft, i) + ","
+                + str.substring(i, lineRight) + "." + str.substring(lineRight));
     }
 
 
@@ -22,18 +24,23 @@ public class _0816AmbiguousCoordinates {
         //处理字符串
         String str = s.substring(1, s.length() - 1);
         ArrayList<String> list = new ArrayList<>();
-        for (int i = 1; i < str.length(); i++) {
+        ArrayList<Integer> left = new ArrayList<>();
+        ArrayList<Integer> right = new ArrayList<>();
+        for (int i = 1; i < str.length(); i++) {//第一层循环，用来遍历逗号
+            //找出左边所有的可行点
             for (int lineLeft = 1; lineLeft < i; lineLeft++) {
-                if (!(str.charAt(i - 1) == '0' && str.charAt(i) == '0')) {
-                    // TODO: 2022/11/7 以下是错误代码，忽略了首位为0的情况是不能随意加.的
-//                    addStringList(list, str.substring(0, i), str.substring(i));
-                } else {
-                    //若第一个字符后最后一个字符都不为0，则可以加入list
+
+            }
+
+            //找出右边所有的可行点
+            for (int lineRight = i + 1; lineRight < str.length() - 1; lineRight++) {
+
+            }
+            //遍历组合所有可行点
+            for (Integer Left : left) {
+                for (Integer Right : right) {
 
                 }
-            }
-            for (int lineRight = i + 1; lineRight < str.length(); lineRight++) {
-
             }
         }
         return list;
@@ -43,6 +50,12 @@ public class _0816AmbiguousCoordinates {
     public void TestSubString() {
         String str = "0123456";
         System.out.println(str.substring(0, str.length()));
+    }
+
+    @Test
+    public void Test01() {
+        String s = "(123)";
+        System.out.println(ambiguousCoordinates(s));
     }
 
 }
