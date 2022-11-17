@@ -13,7 +13,8 @@ public class _790DominoAndTrominoTiling {
     static final int MOD = 1000000007;
 
     public int numTilings(int n) {
-
+        // TODO: 2022/11/17
+        return 0;
     }
 
 
