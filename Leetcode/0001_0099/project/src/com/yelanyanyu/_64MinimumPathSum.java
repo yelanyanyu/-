@@ -27,11 +27,30 @@ public class _64MinimumPathSum {
         return dp[N - 1][M - 1];
     }
 
+    public static int dp2(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[] dp = new int[cols];
+        dp[0] = matrix[0][0];
+        for (int i = 1; i < cols; i++) {
+            dp[i] = dp[i - 1] + matrix[0][i];
+        }
+        for (int i = 1; i < rows; i++) {
+            dp[0] += matrix[i][0];
+            for (int j = 1; j < cols; j++) {
+                int p1 = dp[j - 1] + matrix[i][j];
+                int p2 = dp[j] + matrix[i][j];
+                dp[j] = Math.min(p2, p1);
+            }
+        }
+        return dp[cols - 1];
+    }
+
     //https://leetcode.cn/problems/minimum-path-sum/
     public int minPathSum(int[][] grid) {
         if (grid == null) {
             return 0;
         }
-        return dp(grid);
+        return dp2(grid);
     }
 }
